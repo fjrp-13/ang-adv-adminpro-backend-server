@@ -15,19 +15,27 @@ const { dbConnection } = require('./database/config');
 const app = express();
 // Configurar CORS
 app.use(cors()); // use = Middleware
+// Middleware para la lectura y parseo del Body
+app.use(express.json());
 
 // Base de Datos
 dbConnection();
 
 // Rutas
-app.get( '/', (req, res) => {
-    res
-    .status(200)
-    .json({
-        success: true,
-        msg: 'Hola Mundo'
-    });
-});
+// ... definimos nuestros Middleware de Rutas
+app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/login', require('./routes/auth'));
+// app.get( '/api/usuarios', (req, res) => {
+//     res
+//     .status(200)
+//     .json({
+//         success: true,
+//         usuarios: [{
+//             id: 123,
+//             nombre: 'Usuario 123'
+//         }]
+//     });
+// });
 
 // Levantar el servidor en el puerto que queramos (en este caso, el 3000)
 app.listen(process.env.PORT, () => {
