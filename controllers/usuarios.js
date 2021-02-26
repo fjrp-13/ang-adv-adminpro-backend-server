@@ -11,13 +11,39 @@ const Usuario = require('../models/usuario');
 // Importamos el helper para JWT
 const { generarJWT } = require('../helpers/jwt');
 
-const getUsuarios = async (req, res) => {
-    const usuarios = await Usuario.find({}, 'nombre email role google');
+const getUsuarios_sin_paginacion = async (req, res) => {
+    const usuarios = await Usuario.find({}, 'nombre email img role google');
     res
     .status(200)
     .json({
         success: true,
         usuarios,
+        uid: req.uid // devolvemos el uid del usuario que hizo la petición (y que hemos añadido a la Request desde el Middleware "validar-jwt")
+    });
+};
+
+const getUsuarios = async (req, res) => {
+    const from = Number(req.query.from) || 0;
+    const limit = Number(req.query.limit) || 5;
+
+    // const usuarios = await Usuario
+    //                         .find({}, 'nombre email img role google')
+    //                         .skip(from)
+    //                         .limit(limit);
+    // const total = await Usuario.count();
+    const promesa1 = Usuario
+                        .find({}, 'nombre email img role google')
+                        .skip(from)
+                        .limit(limit);
+    const promesa2 = Usuario.countDocuments();
+    const [ usuarios, total ] = await Promise.all([promesa1, promesa2]); // Para que las promesas se ejecuten de manera simultánea pero que espere a que TODAS las promesas hayan finalizado
+    
+    res
+    .status(200)
+    .json({
+        success: true,
+        usuarios,
+        total,
         uid: req.uid // devolvemos el uid del usuario que hizo la petición (y que hemos añadido a la Request desde el Middleware "validar-jwt")
     });
 };
