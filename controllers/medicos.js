@@ -51,7 +51,8 @@ const crearMedico = async (req, res = response) => {
 };
 
 const actualizarMedico = async (req, res = response) => {
-    const id = req.params.id;
+    const id  = req.params.id;
+    const uid = req.uid;
 
     try {
         // Validaciones
@@ -62,8 +63,6 @@ const actualizarMedico = async (req, res = response) => {
                 msg: 'ID no válido'
             });
         }
-
-        // TODO: Validar Token y comprobar si es el usuario correcto
 
         // Guardamos un objeto con los campos
         const { nombre, ...campos} = req.body;

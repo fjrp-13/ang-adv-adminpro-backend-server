@@ -63,7 +63,8 @@ const crearHospital = async (req, res = response) => {
 };
 
 const actualizarHospital = async (req, res = response) => {
-    const id = req.params.id;
+    const id  = req.params.id;
+    const uid = req.uid;
 
     try {
         // Validaciones
@@ -75,7 +76,13 @@ const actualizarHospital = async (req, res = response) => {
             });
         }
 
-        // TODO: Validar Token y comprobar si es el usuario correcto
+        // Validar Token y comprobar si es el usuario correcto
+        // if (hospitalDB.usuario !== uid) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         msg: 'No eres el usuario que creó el hospital'
+        //     });
+        // }
 
         // Guardamos un objeto con los campos
         const { nombre, ...campos} = req.body;
@@ -90,6 +97,7 @@ const actualizarHospital = async (req, res = response) => {
             }
             // Añadimos el nuevo nombre
             campos.nombre = nombre;
+            //campos.usuario = uid; // actualizamos el usuario que no ha modificado (si fuera necesario)
         }
 
         const hospitalUpdated = await Hospital.findByIdAndUpdate( id, campos, {new:true} );
@@ -110,10 +118,10 @@ const actualizarHospital = async (req, res = response) => {
 };
 
 const borrarHospital = async (req, res = response) => {
-    const uid = req.params.id;
+    const id = req.params.id;
 
     try {
-        const hospitalDB = await Hospital.findById(uid);
+        const hospitalDB = await Hospital.findById(id);
         if (!hospitalDB) {
             return res.status(400).json({
                 success: false,
@@ -121,7 +129,7 @@ const borrarHospital = async (req, res = response) => {
             });
         }
 
-        const hospitalDeleted = await Hospital.findByIdAndDelete( uid );
+        const hospitalDeleted = await Hospital.findByIdAndDelete( id );
 
         res
         .status(200)

@@ -7,10 +7,12 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 // Importamos nuestro Middleware de validación
 const { validarCampos } = require('../middlewares/validar-campos');
+// Importamos nuestro Middleware de validación de Token
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 
 // Importamos el Controlador de Auth
-const { login, googleSignin } = require('../controllers/auth');
+const { login, googleSignin, renewToken } = require('../controllers/auth');
 
 const router = Router();
 
@@ -38,4 +40,12 @@ router.post(
     googleSignin
 );
 
+
+router.get( 
+    '/renew', 
+    [
+        validarJWT,
+    ] , 
+    renewToken
+);
 module.exports = router;
