@@ -21,6 +21,9 @@ app.use(express.json());
 // Base de Datos
 dbConnection();
 
+// Directorio Público
+app.use(express.static('public'));
+
 // Rutas
 // ... definimos nuestros Middleware de Rutas
 app.use('/api/usuarios', require('./routes/usuarios'));

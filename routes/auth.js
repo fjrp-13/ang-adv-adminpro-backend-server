@@ -10,7 +10,7 @@ const { validarCampos } = require('../middlewares/validar-campos');
 
 
 // Importamos el Controlador de Auth
-const { login } = require('../controllers/auth');
+const { login, googleSignin } = require('../controllers/auth');
 
 const router = Router();
 
@@ -26,6 +26,16 @@ router.post(
         validarCampos
     ] , 
     login
+);
+
+router.post( 
+    '/google', 
+    [
+        check('token', 'El token es obligatorio.').not().isEmpty(),
+        // Nuestro Middleware, será el último en llamarse
+        validarCampos
+    ] , 
+    googleSignin
 );
 
 module.exports = router;
