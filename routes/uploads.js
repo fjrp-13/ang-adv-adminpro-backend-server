@@ -22,9 +22,9 @@ router.use(fileUpload()); // Middleware "fileupload"
 
 router.get( 
     '/:type/:image', 
-    [
-        validarJWT, // El Middleware de validación de token será el 1º, para que, si falla, no haga nada más
-    ],
+    // [
+    //     validarJWT, // El Middleware de validación de token será el 1º, para que, si falla, no haga nada más
+    // ],
     getImage
 );
 router.put( 

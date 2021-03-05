@@ -119,8 +119,15 @@ const actualizarUsuario = async (req, res = response) => {
                     msg: 'Email duplicado'
                 });
             }
-            // Añadimos el nuevo email
-            campos.email = email;
+            // Añadimos el nuevo email (si NO es un usuario de Google)
+            if (!usuarioDB.google) {
+                campos.email = email;
+            } else if (usuarioDB.email !== email) {
+                return res.status(400).json({
+                    success: false,
+                    msg: 'No se puede cambiar el email a un usuario de Google'
+                });
+            }
         }
 
         //const filter = { _id: uid };
