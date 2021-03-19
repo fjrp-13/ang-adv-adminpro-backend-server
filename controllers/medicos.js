@@ -11,13 +11,34 @@ const { generarJWT } = require('../helpers/jwt');
 const getMedicos = async (req, res) => {
     const medicos = await Medico.find({}, 'nombre img')
             .populate('usuario', 'nombre img' )
-            .populate('hospital', 'nombre' );
+            .populate('hospital', 'nombre img' );
     res
     .status(200)
     .json({
         success: true,
         medicos,
     });
+};
+
+const getMedico = async (req, res = response) => {
+    const id = req.params.id;
+    try {
+        const medico = await Medico.findById(id)
+        .populate('usuario', 'nombre img' )
+        .populate('hospital', 'nombre img' );
+        res
+        .status(200)
+        .json({
+            success: true,
+            medico,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            medico: null,
+            msg: 'Error inesperado al buscar el médico especificado'
+        });
+    }
 };
 
 const crearMedico = async (req, res = response) => {
@@ -127,6 +148,7 @@ const borrarMedico = async (req, res = response) => {
 
 module.exports = {
     getMedicos,
+    getMedico,
     crearMedico,
     actualizarMedico,
     borrarMedico,

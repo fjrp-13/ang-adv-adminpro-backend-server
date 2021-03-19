@@ -10,9 +10,19 @@ const doSearch = async (req, res = response) => {
     const query = req.params.query;
 
     const queryRegExp = new RegExp( query, 'i');
-
     const [ usuarios, hospitales, medicos ] = await Promise.all([
-        Usuario.find({nombre: queryRegExp}), 
+        // https://developerslogblog.wordpress.com/2019/10/15/mongodb-how-to-filter-by-multiple-fields/
+        // Usuario.find({nombre: queryRegExp}), 
+        Usuario.find({
+            $or: [
+              {
+                nombre: queryRegExp
+              },
+              {
+                email: queryRegExp
+              }
+            ]
+          }),
         Hospital.find({nombre: queryRegExp}),
         Medico.find({nombre: queryRegExp})
     ]); // Para que las promesas se ejecuten de manera simultánea pero que espere a que TODAS las promesas hayan finalizado
@@ -46,7 +56,8 @@ const doSearchByType = async (req, res = response) => {
                                 .populate('usuario', 'nombre img');
             break;
         case 'usuarios':
-            data = await Usuario.find({nombre: queryRegExp});
+            // data = await Usuario.find({nombre: queryRegExp});
+            data = await Usuario.find({$or: [{nombre: queryRegExp}, {email: queryRegExp}]});
             break;
         default:
             return res

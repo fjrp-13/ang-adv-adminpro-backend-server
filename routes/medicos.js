@@ -12,7 +12,7 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
 // Importamos el Controlador de Médicos
-const { getMedicos, crearMedico, actualizarMedico, borrarMedico } = require('../controllers/medicos');
+const { getMedicos, getMedico, crearMedico, actualizarMedico, borrarMedico } = require('../controllers/medicos');
 
 const router = Router();
 
@@ -47,6 +47,12 @@ router.delete(
     '/:id', 
     validarJWT,
     borrarMedico
+);
+
+router.get(
+    '/:id', 
+    validarJWT,
+    getMedico
 );
 
 
