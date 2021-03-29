@@ -37,7 +37,7 @@ app.use('/api/upload', require('./routes/uploads'));
 // Cualquier otra ruta/petición ...
 app.get( '*', (req, res) => {
     // ...redirigir al index.html
-    response.sendFile(path.resolve(__dirname, 'public/index.html'));
+    res.sendFile(path.resolve(__dirname, 'public/index.html'));
 });
 // app.get( '/api/usuarios', (req, res) => {
 //     res
