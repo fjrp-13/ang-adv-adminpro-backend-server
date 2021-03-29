@@ -39,6 +39,10 @@ app.get( '*', (req, res) => {
     // ...redirigir al index.html
     res.sendFile(path.resolve(__dirname, 'public/index.html'));
 });
+
+app.get('/*', function(req, res) {
+    res.sendFile('index.html', {root: 'dist/public/'});
+});
 // app.get( '/api/usuarios', (req, res) => {
 //     res
 //     .status(200)
