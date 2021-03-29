@@ -61,7 +61,7 @@ const validarADMIN_ROLE = async(req, res = response, next) => {
 
 /* Verifica si el usuario es el usuario que está logeado (o tiene el rol ADMIN_ROLE)
  */
-const validarCurrentUser = async(req, res = response, next) => {
+const validarIsCurrentUser = async(req, res = response, next) => {
     const uid = req.uid;
     const id = req.params.id;
     try {
@@ -94,5 +94,5 @@ const validarCurrentUser = async(req, res = response, next) => {
 module.exports = {
     validarJWT,
     validarADMIN_ROLE,
-    validarCurrentUser
+    validarIsCurrentUser
 };
