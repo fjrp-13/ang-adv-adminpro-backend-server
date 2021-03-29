@@ -1,7 +1,7 @@
 // Mediante el paquete 'dotenv', busca el fichero con extensión '.env' y lo establece en las variables de entorno de NodeJS
 // Se podrán leer esas variables de entorno a traves del objeto "process.env"
 require('dotenv').config();
-
+const path = require('path');
 // Importar Express
 const express = require('express');
 
@@ -10,6 +10,7 @@ const cors = require('cors');
 
 // Importar mi obj de configuración de la conexión a la DB
 const { dbConnection } = require('./database/config');
+const { response } = require('express');
 
 // crear el servicor Express
 const app = express();
@@ -32,6 +33,12 @@ app.use('/api/hospitales', require('./routes/hospitales'));
 app.use('/api/medicos', require('./routes/medicos'));
 app.use('/api/search', require('./routes/busquedas'));
 app.use('/api/upload', require('./routes/uploads'));
+
+// Cualquier otra ruta/petición ...
+app.get( '*', (req, res) => {
+    // ...redirigir al index.html
+    response.sendFile(path.resolve(__dirname, 'public/index.html'));
+});
 // app.get( '/api/usuarios', (req, res) => {
 //     res
 //     .status(200)
@@ -43,6 +50,9 @@ app.use('/api/upload', require('./routes/uploads'));
 //         }]
 //     });
 // });
+
+
+
 
 // Levantar el servidor en el puerto que queramos (en este caso, el 3000)
 app.listen(process.env.PORT, () => {
